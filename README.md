@@ -16,7 +16,14 @@ See [Claude's plugin guide](https://support.claude.com/en/articles/13837440-use-
 
 ### Claude Code
 
-Clone this repository, then load the plugin locally:
+Add the marketplace and install the plugin:
+
+```sh
+claude plugin marketplace add rememberthis-io/remember-this-plugin
+claude plugin install remember-this@remember-this
+```
+
+For local development, clone this repository and load the plugin directly:
 
 ```sh
 git clone https://github.com/rememberthis-io/remember-this-plugin.git

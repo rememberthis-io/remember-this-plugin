@@ -1,0 +1,13 @@
+{
+  "name": "remember-this",
+  "owner": {
+    "name": "Remember This"
+  },
+  "plugins": [
+    {
+      "name": "remember-this",
+      "source": "./",
+      "description": "Save and recall memories across conversations and assistants."
+    }
+  ]
+}
