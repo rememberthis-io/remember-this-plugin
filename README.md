@@ -55,7 +55,7 @@ Add `https://remember-this.io/mcp` as a Streamable HTTP server with OAuth. Clien
 - “Where did I leave my spare key?”
 - “Forget the memory about my spare key.”
 
-The tools are `remember_this` (save), `remind_me` (search), and `forget_memory` (hide from recall). Hosts may prefix their names. Forgetting does not permanently erase a memory. Retrieved information becomes available to the assistant in that conversation.
+The tools are `memorize` (save), `recall` (search), and `forget` (hide from recall). Hosts may prefix their names. Forgetting does not permanently erase a memory. Retrieved information becomes available to the assistant in that conversation.
 
 ## Build
 

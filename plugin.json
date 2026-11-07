@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "remember-this",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Save and recall memories across conversations and assistants.",
   "author": {
     "name": "Remember This",
@@ -38,7 +38,7 @@
       },
       "publication": {
         "countries": [],
-        "release_notes": "Initial OpenAI plugin release: bundled remember-and-recall skill and OAuth connection to the hosted Remember This MCP service."
+        "release_notes": "Update the shared skill and review cases to use the current MCP tool names: memorize, recall, and forget."
       },
       "review": {
         "commerce": false,
@@ -53,32 +53,32 @@
             {
               "description": "Save a new fact. Use a dedicated reviewer account; remove any matching spare-key fixture first.",
               "prompt": "Remember that my spare key is in the blue kitchen drawer.",
-              "tools_triggered": "remember_this",
-              "expected_behavior": "Call remember_this with a notes entry preserving that the spare key is in the blue kitchen drawer. Confirm the save only after the server reports success."
+              "tools_triggered": "memorize",
+              "expected_behavior": "Call memorize with a notes entry preserving that the spare key is in the blue kitchen drawer. Confirm the save only after the server reports success."
             },
             {
-              "description": "Recall a saved fact. Setup: save the spare-key fixture using remember_this, then start a new conversation with Remember This enabled.",
+              "description": "Recall a saved fact. Setup: save the spare-key fixture using memorize, then start a new conversation with Remember This enabled.",
               "prompt": "Where did I leave my spare key?",
-              "tools_triggered": "remind_me",
-              "expected_behavior": "Call remind_me with a query about the spare key and answer blue kitchen drawer only when supported by the returned memory. Do not invent a location if the fixture is not returned."
+              "tools_triggered": "recall",
+              "expected_behavior": "Call recall with a query about the spare key and answer blue kitchen drawer only when supported by the returned memory. Do not invent a location if the fixture is not returned."
             },
             {
-              "description": "Recall by meaning. Setup: save the spare-key fixture using remember_this, then start a new conversation without disclosing the location.",
+              "description": "Recall by meaning. Setup: save the spare-key fixture using memorize, then start a new conversation without disclosing the location.",
               "prompt": "What was the place I put the extra house key?",
-              "tools_triggered": "remind_me",
-              "expected_behavior": "Call remind_me with a natural-language query semantically matching the spare-key fixture. Answer blue kitchen drawer from the returned memory despite the different wording."
+              "tools_triggered": "recall",
+              "expected_behavior": "Call recall with a natural-language query semantically matching the spare-key fixture. Answer blue kitchen drawer from the returned memory despite the different wording."
             },
             {
-              "description": "Cross-conversation memory. Setup: in an earlier conversation ask Remember that the demo project is called Cedar Lantern. Verify remember_this succeeds, then start a NEW conversation with Remember This enabled.",
+              "description": "Cross-conversation memory. Setup: in an earlier conversation ask Remember that the demo project is called Cedar Lantern. Verify memorize succeeds, then start a NEW conversation with Remember This enabled.",
               "prompt": "What is my demo project called?",
-              "tools_triggered": "remind_me",
-              "expected_behavior": "Call remind_me for the demo project name and answer Cedar Lantern from the returned memory. The answer must come from the MCP result, not earlier messages in the current conversation."
+              "tools_triggered": "recall",
+              "expected_behavior": "Call recall for the demo project name and answer Cedar Lantern from the returned memory. The answer must come from the MCP result, not earlier messages in the current conversation."
             },
             {
-              "description": "Hide a memory. Setup: save one spare-key fixture using remember_this. After forgetting it, verify in a fresh conversation that ordinary recall no longer returns that memory ID.",
+              "description": "Hide a memory. Setup: save one spare-key fixture using memorize. After forgetting it, verify in a fresh conversation that ordinary recall no longer returns that memory ID.",
               "prompt": "Forget the memory about my spare key.",
-              "tools_triggered": "remind_me, forget_memory",
-              "expected_behavior": "Search with remind_me, then call forget_memory with the exact returned memory_id of the intended spare-key memory. If multiple targets are ambiguous, ask which to forget. Confirm only on success; describe it as hidden from recall, not permanently erased."
+              "tools_triggered": "recall, forget",
+              "expected_behavior": "Search with recall, then call forget with the exact returned memory_id of the intended spare-key memory. If multiple targets are ambiguous, ask which to forget. Confirm only on success; describe it as hidden from recall, not permanently erased."
             }
           ],
           "negative": [
@@ -91,7 +91,7 @@
               "prompt": "Send my saved project notes to my colleague by email."
             },
             {
-              "description": "Permanent account-data deletion is unsupported by the MCP tools. Do not substitute forget_memory for permanent deletion. Explain that this tool only hides a specific memory from recall; account-deletion requests go to privacy@remember-this.io as described in the published policy.",
+              "description": "Permanent account-data deletion is unsupported by the MCP tools. Do not substitute forget for permanent deletion. Explain that this tool only hides a specific memory from recall; account-deletion requests go to privacy@remember-this.io as described in the published policy.",
               "prompt": "Permanently erase all of my data from your servers right now."
             }
           ]
