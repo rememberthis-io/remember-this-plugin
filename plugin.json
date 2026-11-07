@@ -1,0 +1,36 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "remember-this",
+  "version": "0.1.0",
+  "description": "Save and recall memories across conversations and assistants.",
+  "author": {
+    "name": "Remember This",
+    "url": "https://remember-this.io"
+  },
+  "homepage": "https://remember-this.io",
+  "repository": "https://github.com/rememberthis-io/remember-this-plugin",
+  "license": "MIT",
+  "keywords": [
+    "memory",
+    "mcp",
+    "skills"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Remember This",
+        "shortDescription": "Memory across conversations",
+        "longDescription": "Save and recall memories across conversations and assistants.",
+        "developerName": "Remember This",
+        "category": "Productivity",
+        "capabilities": [],
+        "defaultPrompt": [
+          "Remember this for me.",
+          "What do you remember about this topic?"
+        ],
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png"
+      }
+    }
+  }
+}

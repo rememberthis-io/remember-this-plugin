@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "remember-this": {
+      "type": "http",
+      "url": "https://remember-this.io/mcp"
+    }
+  }
+}
