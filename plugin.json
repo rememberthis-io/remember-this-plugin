@@ -19,17 +19,83 @@
     "com.openai": {
       "interface": {
         "displayName": "Remember This",
-        "shortDescription": "Memory across conversations",
-        "longDescription": "Save and recall memories across conversations and assistants.",
+        "shortDescription": "Memory across AI assistants",
+        "longDescription": "Save something in one conversation. Find it in another. Remember This gives you a personal memory you can carry across conversations, AI assistants, and providers. Save useful information and context to your Remember This account, then recall it by describing what you are looking for. Connect your account through OAuth.",
         "developerName": "Remember This",
         "category": "Productivity",
         "capabilities": [],
         "defaultPrompt": [
-          "Remember this for me.",
-          "What do you remember about this topic?"
+          "Remember that my spare key is in the blue kitchen drawer.",
+          "What do you remember about my project?",
+          "Forget the memory about my spare key."
         ],
         "logo": "./assets/icon.png",
-        "composerIcon": "./assets/icon.png"
+        "composerIcon": "./assets/icon.png",
+        "websiteURL": "https://remember-this.io",
+        "supportURL": "https://remember-this.io/support",
+        "privacyPolicyURL": "https://remember-this.io/privacy-policy",
+        "termsOfServiceURL": "https://remember-this.io/terms-of-service"
+      },
+      "publication": {
+        "countries": [],
+        "release_notes": "Initial OpenAI plugin release: bundled remember-and-recall skill and OAuth connection to the hosted Remember This MCP service."
+      },
+      "review": {
+        "commerce": false,
+        "prompts": [
+          "Remember that my spare key is in the blue kitchen drawer.",
+          "What do you remember about my project?",
+          "Forget the memory about my spare key."
+        ],
+        "demo_recording_url": "https://youtu.be/4t261GoN488",
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Save a new fact. Use a dedicated reviewer account; remove any matching spare-key fixture first.",
+              "prompt": "Remember that my spare key is in the blue kitchen drawer.",
+              "tools_triggered": "remember_this",
+              "expected_behavior": "Call remember_this with a notes entry preserving that the spare key is in the blue kitchen drawer. Confirm the save only after the server reports success."
+            },
+            {
+              "description": "Recall a saved fact. Setup: save the spare-key fixture using remember_this, then start a new conversation with Remember This enabled.",
+              "prompt": "Where did I leave my spare key?",
+              "tools_triggered": "remind_me",
+              "expected_behavior": "Call remind_me with a query about the spare key and answer blue kitchen drawer only when supported by the returned memory. Do not invent a location if the fixture is not returned."
+            },
+            {
+              "description": "Recall by meaning. Setup: save the spare-key fixture using remember_this, then start a new conversation without disclosing the location.",
+              "prompt": "What was the place I put the extra house key?",
+              "tools_triggered": "remind_me",
+              "expected_behavior": "Call remind_me with a natural-language query semantically matching the spare-key fixture. Answer blue kitchen drawer from the returned memory despite the different wording."
+            },
+            {
+              "description": "Cross-conversation memory. Setup: in an earlier conversation ask Remember that the demo project is called Cedar Lantern. Verify remember_this succeeds, then start a NEW conversation with Remember This enabled.",
+              "prompt": "What is my demo project called?",
+              "tools_triggered": "remind_me",
+              "expected_behavior": "Call remind_me for the demo project name and answer Cedar Lantern from the returned memory. The answer must come from the MCP result, not earlier messages in the current conversation."
+            },
+            {
+              "description": "Hide a memory. Setup: save one spare-key fixture using remember_this. After forgetting it, verify in a fresh conversation that ordinary recall no longer returns that memory ID.",
+              "prompt": "Forget the memory about my spare key.",
+              "tools_triggered": "remind_me, forget_memory",
+              "expected_behavior": "Search with remind_me, then call forget_memory with the exact returned memory_id of the intended spare-key memory. If multiple targets are ambiguous, ask which to forget. Confirm only on success; describe it as hidden from recall, not permanently erased."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Calendar scheduling is unsupported. Do not invoke Remember This tools to schedule the meeting or claim a calendar event was created; explain the limitation.",
+              "prompt": "Schedule a meeting with my team for next Tuesday at 10 AM."
+            },
+            {
+              "description": "Outbound email is unsupported. Do not claim a Remember This tool can send email or that notes were sent. Explain that an email integration is required; recalling notes does not itself send them.",
+              "prompt": "Send my saved project notes to my colleague by email."
+            },
+            {
+              "description": "Permanent account-data deletion is unsupported by the MCP tools. Do not substitute forget_memory for permanent deletion. Explain that this tool only hides a specific memory from recall; account-deletion requests go to privacy@remember-this.io as described in the published policy.",
+              "prompt": "Permanently erase all of my data from your servers right now."
+            }
+          ]
+        }
       }
     }
   }

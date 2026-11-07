@@ -27,7 +27,7 @@ Use `/mcp` to connect and authorize Remember This. See [Claude's plugin document
 
 ### ChatGPT and Codex
 
-Use `remember-this-openai-<version>.zip` in a host installation flow that accepts plugin packages. This repository is not a listing in the OpenAI plugin directory; directory publication requires a separate submission and review. See [OpenAI's plugin documentation](https://developers.openai.com/plugins).
+Use `remember-this-openai-<version>-submission.zip` in a host installation flow that accepts plugin packages. This repository is not a listing in the OpenAI plugin directory; directory publication requires a separate submission and review. See [OpenAI's plugin documentation](https://developers.openai.com/plugins).
 
 You can also connect the MCP directly in ChatGPT through its custom remote MCP connection flow. For Codex:
 
@@ -59,6 +59,8 @@ python3 scripts/build.py
 ```
 
 The build validates shared metadata and connection settings, then writes two ZIPs to `dist/`. Both include the same skill and branding. Claude uses `.claude-plugin/plugin.json` and `.mcp.json`; OpenAI uses root `plugin.json` and `mcp.json`. The package version lives in both manifests and must match.
+
+The OpenAI submission package includes listing and publication metadata, five positive and three negative review cases, and a hosted demo URL. These cases are prepared expectations, not evidence that live integration tests passed. Reviewer credentials belong only in the secure submission dashboard. Tool annotations, reviewer access, developer verification, scans, and attestations still need checking before submission.
 
 CI builds the packages on pushes and pull requests. Maintainers can attach the resulting ZIPs to a GitHub release. Test installation, OAuth, recall, save, and forget in each target host before declaring a version compatible; packaging validation alone does not establish host compatibility.
 

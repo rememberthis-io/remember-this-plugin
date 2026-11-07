@@ -37,6 +37,26 @@ def build():
     auth = server["extensions"]["com.openai"]["auth"]
     if auth != {"type": "oauth", "client": {"mode": "dcr"}, "defaultScopes": ["mcp:use"]}:
         raise ValueError("Expected OAuth with dynamic client registration")
+    review = portable.get("extensions", {}).get("com.openai", {}).get("review")
+    if review is not None:
+        cases = review["test_cases"]
+        for kind, count in (("positive", 5), ("negative", 3)):
+            if len(cases[kind]) != count:
+                raise ValueError(f"Expected {count} {kind} review cases")
+            required = ["description", "prompt"]
+            if kind == "positive":
+                required += ["tools_triggered", "expected_behavior"]
+            for case in cases[kind]:
+                if any(not isinstance(case.get(key), str) or not case[key].strip() for key in required):
+                    raise ValueError(f"Incomplete {kind} review case")
+        if not review["demo_recording_url"].startswith("https://"):
+            raise ValueError("Expected an HTTPS demo recording URL")
+        interface = portable["extensions"]["com.openai"]["interface"]
+        for field in ("websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"):
+            if not interface.get(field, "").startswith("https://"):
+                raise ValueError(f"Missing public listing URL: {field}")
+        if portable.get("apps") is not None or portable["extensions"]["com.openai"].get("apps") is not None:
+            raise ValueError("Public uploads cannot reference an existing app")
     skill_path = "skills/remember-and-recall/SKILL.md"
     skill = (ROOT / skill_path).read_text()
     if not skill.startswith("---\nname: remember-and-recall\ndescription: ") or "\n---\n" not in skill[4:]:
@@ -50,7 +70,8 @@ def build():
     output.mkdir(exist_ok=True)
     for target, manifests in targets.items():
         files = sorted(shared + manifests)
-        archive = output / f"remember-this-{target}-{version}.zip"
+        suffix = "-submission" if target == "openai" and review is not None else ""
+        archive = output / f"remember-this-{target}-{version}{suffix}.zip"
         with ZipFile(archive, "w", ZIP_DEFLATED) as bundle:
             for name in files:
                 path = ROOT / name
